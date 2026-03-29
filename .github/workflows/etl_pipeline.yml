@@ -26,6 +26,13 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+        ## Set the environment variable to use certifi's bundle to fix github action error: 
+        # ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate to API
+      #- name: Install CA Certificates
+       # run: |
+       #   sudo apt-get update
+        #  sudo apt-get install -y ca-certificates
+        #  sudo update-ca-certificates
 
       - name: "Run ETL Script"
         run: python etl_py_script.py

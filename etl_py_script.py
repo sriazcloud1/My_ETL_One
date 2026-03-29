@@ -8,12 +8,19 @@ import requests
 import os
 import pandas as pd
 from datetime import datetime
+#import certifi
+
+# Set the environment variable to use certifi's bundle to fix github action error: 
+# ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate to API
+#os.environ['REQUESTS_CA_BUNDLE'] = certifi.where()
+#os.environ['SSL_CERT_FILE'] = certifi.where()
 
 
 
 #loading data
 url = "https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.00&current_weather=true"
-response =  requests.get(url)
+#to trust the url by avoiding the ssl certificate verfication mention verify=False
+response =  requests.get(url, verify=False)
 
 
 # In[22]:
