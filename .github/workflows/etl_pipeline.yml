@@ -1,1 +1,38 @@
 
+name: Scheduling ETL pipeline
+
+on:
+  schedule:
+    - cron: "25 0-20/2 * * *"   #“At minute 25 past every 2nd hour from 0 through 20.”
+  push:
+   branches: [main]
+   workflow_dispatch: #allows triggering manual 
+
+jobs:
+  ETL_RUN:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # allow permissions to write that mesns push the chnages to repo
+  steps:
+    -name: Checkout code
+     uses: actions/checkout@v4
+    -name: Setup the python 
+     uses: actiions@setup-python@v4
+      with: 
+          python-version: '3.10'
+    -name: Install dependencies
+     run: pip install -r requirements.txt
+    -name: Run ETL Script
+     run: python etl_py_script.py
+
+    -name: Commit changes and push into repo
+     run: |
+      git config --global user.name "github-actions[bot]"
+
+      git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      git add data/weather_history.csv
+
+      git commit -m "Automated update: $date" || echo "No chnages to commit"
+
+      git push
