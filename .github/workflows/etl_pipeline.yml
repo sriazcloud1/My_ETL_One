@@ -13,27 +13,27 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # allow permissions to write that mesns push the chnages to repo
-  steps:
-    -name: Checkout code
-     uses: actions/checkout@v6
+    steps:
+     -name: Checkout code
+      uses: actions/checkout@v6
 
-    -name: Setup the python 
-     uses: actions/setup-python@v4
-      with: 
+     -name: Setup the python 
+      uses: actions/setup-python@v4
+       with: 
           python-version: '3.10'
-    -name: Install dependencies
-     run: pip install -r requirements.txt
-    -name: Run ETL Script
-     run: python etl_py_script.py
+     -name: Install dependencies
+      run: pip install -r requirements.txt
+     -name: Run ETL Script
+      run: python etl_py_script.py
 
-    -name: Commit changes and push into repo
-     run: |
-      git config --global user.name "github-actions[bot]"
+     -name: Commit changes and push into repo
+      run: |
+       git config --global user.name "github-actions[bot]"
 
-      git config --global user.email "github-actions[bot]@users.noreply.github.com"
+       git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      git add data/weather_history.csv
+       git add data/weather_history.csv
 
-      git commit -m "Automated update: $date" || echo "No chnages to commit"
+       git commit -m "Automated update: $date" || echo "No chnages to commit"
 
-      git push
+       git push
