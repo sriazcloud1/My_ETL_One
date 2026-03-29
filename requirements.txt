@@ -1,5 +1,4 @@
  
 requests == 2.6.0
 pandas == 2.3
-python-dotenv == 1.2.2 
-
+python-dotenv == 1.2.1
