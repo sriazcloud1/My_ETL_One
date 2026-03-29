@@ -1,39 +1,41 @@
 
+
 name: Scheduling ETL pipeline
 
 on:
   schedule:
-    - cron: "25 0-20/2 * * *"   #“At minute 25 past every 2nd hour from 0 through 20.”
+    - cron: "25 0-20/2 * * *" # "At minute 25 past every 2nd hour from 0 through 20."
   push:
-   branches: [main]
-   workflow_dispatch: #allows triggering manual 
+    branches: [main]
+  workflow_dispatch: # allows triggering manual runs
 
 jobs:
   ETL_RUN:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # allow permissions to write that mesns push the chnages to repo
+      contents: write # allows pushing changes back to the repo
+    
     steps:
-     -name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-     -name: Setup the python 
-      uses: actions/setup-python@v4
-       with: 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
           python-version: '3.10'
-     -name: Install dependencies
-      run: pip install -r requirements.txt
-     -name: Run ETL Script
-      run: python etl_py_script.py
 
-     -name: Commit changes and push into repo
-      run: |
-       git config --global user.name "github-actions[bot]"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-       git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: "Run ETL Script"
+        run: python etl_py_script.py
 
-       git add data/weather_history.csv
-
-       git commit -m "Automated update: $date" || echo "No chnages to commit"
-
-       git push
+      - name: Commit changes and push into repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/weather_history.csv
+          # Capture current date for the message
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
+          git commit -m "Automated update: $TIMESTAMP" || echo "No changes to commit"
+          git push
