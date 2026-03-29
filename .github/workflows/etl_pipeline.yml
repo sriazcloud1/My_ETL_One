@@ -15,7 +15,8 @@ jobs:
       contents: write # allow permissions to write that mesns push the chnages to repo
   steps:
     -name: Checkout code
-     uses: actions/checkout@v4
+     uses: actions/checkout@v6
+
     -name: Setup the python 
      uses: actions/setup-python@v4
       with: 
